@@ -12,12 +12,25 @@ contract FuzzTest is Test {
         math = new FuzzMath();
     }
 
-    function testAddManual() public {
+    function test_Add() public {
         assertEq(math.add(1, 2), 3);
     }
 
-    function testAddFuzz(uint256 a, uint256 b) public {
-        if (a + b < a) vm.expectRevert(); // overflow
+    function testFuzz_Add(uint256 a, uint256 b) public {
+        // Overflow check
+        unchecked {
+            // Assumes state is true, otherwise test will discard
+            vm.assume(a + b >= a);
+        }
+
+        uint256 res = math.add(a, b);
+        assertEq(res, a + b);
+    }
+
+    function testFuzz_AddBounds(uint256 a, uint256 b) public {
+        // Bounds value to min and max values
+        a = bound(a, 0, 100);
+        b = bound(b, 0, 100);
 
         uint256 res = math.add(a, b);
         assertEq(res, a + b);
