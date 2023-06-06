@@ -12,7 +12,7 @@ contract InvariantWETHTest is Test {
         weth = new WETH();
     }
 
-    function invariant_BalanceIsAlwaysZero() public {
-        assertEq(weth.balanceOf(address(this)), 0);
+    function invariant_TotalSupplyIsAlwaysZero() public {
+        assertEq(weth.totalSupply(), 0);
     }
 }
